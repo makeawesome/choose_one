@@ -1,13 +1,15 @@
 <template>
-    <div>
-        <span>Choice Component</span>
-        <ul>
+    <div id="choice">
+        <span class="title">FEED THE MONKEY</span>
+        <ul class="result">
             <li v-for="(item, index) in selectedItems" :key="index">
                 {{item.name}}
             </li>
         </ul>
-        <button type="button" @click="chooseOne()" value="GET">GET</button>
-        <button type="button" @click="init()" value="INIT">INIT</button>
+        <div class="buttons">
+            <button type="button" class="left" @click="chooseOne()">뽑기</button>
+            <button type="button" class="right" @click="init()">처음부터</button>
+        </div>
     </div>
 </template>
 
@@ -56,5 +58,45 @@ export default {
 </script>
 
 <style scoped>
+#choice {
+    max-width: 600px;
+    margin: 80px auto;
+    margin-bottom: 120px;
+}
 
+.title {
+    text-align: center;
+    display: block;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.result {
+    display: block;
+    margin: 20px auto;
+}
+
+#choice > .buttons {
+    position: fixed;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    height: 90px;
+    width: 100%;
+    padding: 1em 0;
+}
+
+.buttons > button {
+    padding: .2em 0;
+    width: 30%;
+    margin: 0 1.0em;
+}
+
+button.left {
+    margin-left: 0;
+}
+
+button.right {
+    margin-right: 0;
+}
 </style>
