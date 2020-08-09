@@ -1,5 +1,10 @@
+import {rootCategories, childCategories} from '../lib/SampleData.mjs';
+
 const store = {
-    state: {},
+    state: {
+        rootCategories: rootCategories(),
+        childCategories: childCategories()
+    },
     mutations: {},
     actions: {}
 };

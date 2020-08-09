@@ -10,7 +10,7 @@
 export default {
     methods: {
         startGame() {
-            this.$router.push('/choice');
+            this.$router.push('/top-categories');
         }
     }
 }
