@@ -11,59 +11,61 @@
         <div id="buttons">
             <button type="button" @click="all()">전체</button>
             <button type="button" @click="init()">초기화</button>
-            <button type="button" @click="exclude()">...빼고</button>
-            <button type="button" @click="include()">...중에서</button>
+            <button type="button" :disabled="isAllUnselected || isAllSelected" @click="exclude()">...빼고</button>
+            <button type="button" :disabled="isAllUnselected" @click="include()">...중에서</button>
         </div>
     </div>
 </template>
+
 <script>
+import {mapGetters} from 'vuex';
+
 export default {
     data() {
-        let rootCategories = this.$store.state.rootCategories || [];
-        let categories = Object.keys(rootCategories).map(categoryKey => {
-            return {
-                id: categoryKey,
-                name: rootCategories[categoryKey].name
-            };
-        });
-
         return {
-            categories,
-            checkedItems: [],
-            uncheckedItems: Object.keys(rootCategories)
+            checkedItems: []
         };
     },
 
-    // 아무것도 선택 안했을 때 -> ...중에서, ...빼고 비활성화
-    // 모두 선택 했을 때 -> ...빼고 비활성화
-    watch: {
+    computed: {
+        ...mapGetters({
+            categories: 'rootCategoriesArray'
+        }),
 
+        isAllSelected() {
+            return this.checkedItems.length === this.categories.length;
+        },
+
+        isAllUnselected() {
+            return this.checkedItems.length === 0;
+        }
     },
 
     methods: {
         all() {
-            this.data.checkedItems = Object.keys(this.data.categories);
+            this.checkedItems = this.categories.map(item => item.id);
         },
         init() {
-            this.data.checkedItems = [];
+            this.checkedItems = [];
         },
         exclude() {
-            if(this.data.checkedItems.length === 0) {
+            if(this.checkedItems.length === 0) {
                 return;
             }
 
-            console.log(this.data.uncheckedItems);
+
         },
         include() {
-            if(this.data.checkedItems.length === 0) {
+            if(this.checkedItems.length === 0) {
                 return;
             }
 
-            console.log(this.data.checkedItems);
+            
         }
     }
 }
 </script>
+
 <style scoped>
 
 </style>
