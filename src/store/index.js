@@ -1,39 +1,27 @@
-import { rootCategories, childCategories } from '../lib/SampleData.mjs';
+import { topCategories, childCategories } from '../models/CategoryModel.mjs';
 
 const store = {
     state: {
-        rootCategories: rootCategories(),
+        topCategories: topCategories(),
         childCategories: childCategories(),
 
-        selectedRootCategories: [],
-        selectedChildCategories: [],
+        chosenTopCategories: [],
+        chosenChildCategories: [],
     },
     getters: {
-        rootCategoriesArray: state => {
-            return Object.keys(state.rootCategories).map(categoryKey => {
-                return {
-                    id: categoryKey,
-                    name: state.rootCategories[categoryKey].name
-                };
-            });
-        }
+        getTopCategories: state => topCategories(),
+        getChildrenCategories: state => childCategories()
     },
     mutations: {
-        addSelectedRootCategory(state, payload) {
-
-        },
-
-        removeSelectedRootCategory(state, payload) {
-
+        setToChosenTopCategories(state, payload) {
+            console.log('[MUTATION] chosenTop', payload);
+            state.chosenTopCategories = payload.map(catId => catId);
         }
     },
     actions: {
-        addSelectedRootCategory(context) {
-
-        },
-
-        removeSelectedRootCategory(state, payload) {
-
+        setToChosenTopCategories(store, payload) {
+            console.log('[ACTION] chosenTop', payload);
+            store.commit('setToChosenTopCategories', payload);
         }
     }
 };

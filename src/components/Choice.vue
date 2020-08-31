@@ -14,47 +14,47 @@
 </template>
 
 <script>
-import Chooser from '../lib/Chooser.mjs';
-import Data from '../lib/SampleData.mjs';
+// import Chooser from '../model/Chooser.mjs';
+// import Data from '../lib/SampleData.mjs';
 
-var chooser = new Chooser();
+// var chooser = new Chooser();
 
-export default {
-    data() {
-        return {
-            selectedItems: [],
-            candidates: chooser.initChoice(Data),
-        };
-    },
-    methods: {
-        init() {
-            this.selectedItems = [];
-            this.candidates = chooser.initChoice(Data);
-        },
+// export default {
+//     data() {
+//         return {
+//             selectedItems: [],
+//             candidates: chooser.initChoice(Data),
+//         };
+//     },
+//     methods: {
+//         init() {
+//             this.selectedItems = [];
+//             this.candidates = chooser.initChoice(Data);
+//         },
 
-        chooseOne() {
-            let selected = chooser.chooseOneRandomly(this.candidates);
+//         chooseOne() {
+//             let selected = chooser.chooseOneRandomly(this.candidates);
 
-            this.selectedItems.push(selected);
+//             this.selectedItems.push(selected);
             
-            if(this.isFinished(selected)) {
-                this.goResultPage();
-            } else {
-                this.candidates = selected.shops;
-            }
-        },
+//             if(this.isFinished(selected)) {
+//                 this.goResultPage();
+//             } else {
+//                 this.candidates = selected.shops;
+//             }
+//         },
 
-        isFinished(selected) {
-            return !selected.hasOwnProperty('shops');
-        },
+//         isFinished(selected) {
+//             return !selected.hasOwnProperty('shops');
+//         },
 
-        goResultPage() {
-            let selectedNames = this.selectedItems.map(item => item.name);
-            alert(`Result : ${selectedNames.join(' - ')}`);
-            // this.$router.push('/result');
-        }
-    },
-}
+//         goResultPage() {
+//             let selectedNames = this.selectedItems.map(item => item.name);
+//             alert(`Result : ${selectedNames.join(' - ')}`);
+//             // this.$router.push('/result');
+//         }
+//     },
+// }
 </script>
 
 <style scoped>

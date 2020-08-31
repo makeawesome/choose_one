@@ -1,10 +1,15 @@
 <template>
     <div>
         <span class="title">나는 오늘...</span>
-        <div id="categories" >
+        <div id="categories">
             <template v-for="category in categories">
-                <input type="checkbox" :key="category.id + category.name" :value="category.id" :id="category.id" v-model="checkedItems">
-                <label :for="category.id" :key="category.id">{{category.name}}</label>
+                <input type="checkbox"
+                    :key="`input_${category.id}`"
+                    :value="category.id"
+                    :id="category.id"
+                    v-model="checkedCategories"
+                    @change="onChange">
+                <label :for="category.id" :key="`label_${category.id}`">{{category.name}}</label>
             </template>
         </div>
 
@@ -18,49 +23,80 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
     data() {
         return {
-            checkedItems: []
+            checkedCategories: [],
+            uncheckedCategories: this.$store.getters.getTopCategories.map(cat => cat.id),
         };
     },
-
     computed: {
         ...mapGetters({
-            categories: 'rootCategoriesArray'
+            categories: 'getTopCategories',
         }),
 
         isAllSelected() {
-            return this.checkedItems.length === this.categories.length;
+            return this.checkedCategories.length === this.categories.length;
         },
-
         isAllUnselected() {
-            return this.checkedItems.length === 0;
+            return this.checkedCategories.length === 0;
         }
     },
-
     methods: {
+        ...mapActions([
+            'setToChosenTopCategories'
+        ]),
         all() {
-            this.checkedItems = this.categories.map(item => item.id);
+            this.checkedCategories = this.categories.map(cat => cat.id);
+            this.uncheckedCategories = [];
         },
         init() {
-            this.checkedItems = [];
+            this.checkedCategories = [];
+            this.uncheckedCategories = this.categories.map(cat => cat.id);
         },
         exclude() {
-            if(this.checkedItems.length === 0) {
+            if(this.checkedCategories.length === 0) {
                 return;
             }
-
-
+            // 선택된 카테고리 => 체크 안 된 목록
+            let chosenCategories = this.uncheckedCategories;
+            this.moveToNextWith(chosenCategories);
         },
         include() {
-            if(this.checkedItems.length === 0) {
+            if(this.checkedCategories.length === 0) {
                 return;
             }
+            // 선택된 카테고리 => 체크된 목록
+            let chosenCategories = this.checkedCategories;
+            this.moveToNextWith(chosenCategories);
+        },
+        moveToNextWith(chosenCategories) {
+            this.$store.dispatch('setToChosenTopCategories', chosenCategories);
+            console.log('[TOP]', 'route to CHILD');
+        },
+        onChange(event) {
+            let {checked, value: id} = event.target;
 
-            
+            if(checked) {
+                this.removeFromUncheckedCategories(id);
+            } else {
+                this.addToUncheckedCategories(id);
+            }
+        },
+        removeFromUncheckedCategories(targetId) {
+            if(this.hasItem(this.uncheckedCategories, targetId)) {
+                this.uncheckedCategories = this.uncheckedCategories.filter(id => id !== targetId);
+            }
+        },
+        addToUncheckedCategories(targetId) {
+            if(!this.hasItem(this.uncheckedCategories, targetId)) {
+                this.uncheckedCategories.push(targetId);
+            }
+        },
+        hasItem(categories, targetId) {
+            return categories.find(id => id === targetId);
         }
     }
 }
