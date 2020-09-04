@@ -3,24 +3,24 @@ import { topCategories, childCategories } from '../models/CategoryModel.mjs';
 const store = {
     state: {
         topCategories: topCategories(),
-        childCategories: childCategories(),
+        childCategories: [],
 
-        chosenTopCategories: [],
-        chosenChildCategories: [],
+        chosenTopCategories: []
     },
     getters: {
         getTopCategories: state => topCategories(),
-        getChildrenCategories: state => childCategories()
+        getChildCategories: state => (parentIds) => childCategories(parentIds)
     },
     mutations: {
         setToChosenTopCategories(state, payload) {
-            console.log('[MUTATION] chosenTop', payload);
+            console.log('[MUTATION] chosenTopCategories', payload);
             state.chosenTopCategories = payload.map(catId => catId);
+            state.childCategories = childCategories(state.chosenTopCategories);
         }
     },
     actions: {
         setToChosenTopCategories(store, payload) {
-            console.log('[ACTION] chosenTop', payload);
+            console.log('[ACTION] chosenTopCategories', payload);
             store.commit('setToChosenTopCategories', payload);
         }
     }
