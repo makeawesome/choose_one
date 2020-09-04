@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="top-categories">
         <span class="title">나는 오늘...</span>
         <div id="categories">
             <template v-for="category in categories">
@@ -73,8 +73,8 @@ export default {
             this.moveToNextWith(chosenCategories);
         },
         moveToNextWith(chosenCategories) {
-            this.$store.dispatch('setToChosenTopCategories', chosenCategories);
-            console.log('[TOP]', 'route to CHILD');
+            this.$store.dispatch('setToChosenTopCategories', chosenCategories)
+                .then(() => this.$router.push('/child-categories'));
         },
         onChange(event) {
             let {checked, value: id} = event.target;
@@ -103,5 +103,24 @@ export default {
 </script>
 
 <style scoped>
+#top-categories {
+  width: 90%;
+  margin: auto;
+}
 
+#categories {
+    margin-bottom: 20px;
+}
+
+input[type="checkbox"], label {
+    text-align: center;
+}
+
+#buttons > button {
+  width: 50%;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
+  padding: 0.5em;
+}
 </style>
